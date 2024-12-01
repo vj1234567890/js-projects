@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .container {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .boxes {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        grid-template-rows: 1fr auto;
+        gap: 25px;
+        width: 100%;
+        max-width: 1200px;
+        height: 100%;
+    }
+
+    .product_box, .cart_box, .summary_box {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 25px;
+        backdrop-filter: blur(5px);
+    }
+
+    .product_box {
+        grid-column: 1 / 2;
+        grid-row: 1 / 3;
+        overflow-y: auto;
+    }
+
+    .product_card {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 25px;
+        margin-top: 20px;
+    }
+
+    .cards {
+        background: white;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cards:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .cards::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+    }
+
+    h2 {
+        margin-bottom: 20px;
+        font-size: 1.8em;
+        color: #2c3e50;
+        text-align: center;
+        border-bottom: 3px solid #e1e8ed;
+        padding-bottom: 10px;
+        font-weight: 600;
+    }
+
+    img {
+        border-radius: 12px;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    img:hover {
+        transform: scale(1.05);
+    }
+
+    .cards b {
+        font-size: 1.2em;
+        color: #2c3e50;
+        margin: 10px 0;
+    }
+
+    .cards p {
+        color: #3498db;
+        font-weight: bold;
+        font-size: 1.3em;
+        margin: 8px 0;
+    }
+
+    button {
+        width: 130px;
+        height: 45px;
+        background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-top: 10px;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    button:active {
+        background-color: #004494;
+    }
+
+    .cart_item {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .cart_item .data {
+        width: 100%;
+        background-color: #d4e6f1;
+        padding: 10px;
+        border-radius: 8px;
+        margin: 5px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .cart_item p, .summary_box p {
+        font-size: 1.1em;
+        color: #333;
+    }
+
+    input[type="number"] {
+        width: 40px;
+        padding: 3px;
+        text-align: center;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    @media (max-width: 768px) {
+        .boxes {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto;
+        }
+
+        .product_box, .cart_box, .summary_box {
+            width: 100%;
+        }
+    }
+
+    /* Checkout button in summary box */
+    .checkout-btn {
+        width: 100%;
+        height: 50px;
+        background: linear-gradient(90deg, #00b09b, #96c93d);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1em;
+        margin-top: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .checkout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .checkout-btn:active {
+        transform: translateY(0);
+        box-shadow: none;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .modal-content h2 {
+        margin-bottom: 20px;
+        font-size: 1.8em;
+        color: #2c3e50;
+        text-align: center;
+        border-bottom: 3px solid #e1e8ed;
+        padding-bottom: 10px;
+        font-weight: 600;
+    }
+
+    #modalContent {
+        margin-bottom: 20px;
+        font-size: 1.1em;
+        color: #333;
+    }
+
+    #payNowBtn {
+        width: 100%;
+        height: 50px;
+        background: linear-gradient(90deg, #00b09b, #96c93d);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1em;
+        margin-top: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    #payNowBtn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    #payNowBtn:active {
+        transform: translateY(0);
+        box-shadow: none;
+    }
+
+    /* Update the close button styles */
+    .close {
+        position: absolute;
+        right: 20px;
+        top: 15px;
+        width: 32px;
+        height: 32px;
+        background: #f1f1f1;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: bold;
+        color: #666;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .close:hover {
+        background: #ff4757;
+        color: white;
+        transform: rotate(90deg);
+    }
+
+    /* Add styles for the modal header */
+    .modal-header {
+        position: relative;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f1f1f1;
+    }
+
+    .modal-header h2 {
+        margin: 0;
+        padding: 0;
+        border: none;
+    }
+
+</style>
+
+<body>
+    <div class="container">
+        <div class="boxes">
+            <div class="product_box">
+                <h2>PRODUCT</h2>
+                <div class="product_card">
+                    <div class="cards">
+                        <img src="img1.jpg" width="100" height="100"><br>
+                        <b>T-shirt</b>
+                        <p>$20</p>
+                        <button class="cart" data-id="1" data-name="T-shirt" data-price="20">Add to cart</button>
+                    </div>
+                    <div class="cards">
+                        <img src="jeans.jpeg" width="100" height="100"><br>
+                        <b>Jeans</b>
+                        <p>$40</p>
+                        <button class="cart" data-id="2" data-name="Jeans" data-price="40">Add to cart</button>
+                    </div>
+                    <div class="cards">
+                        <img src="sneaker.jpg" width="100" height="100"><br>
+                        <b>Sneaker</b>
+                        <p>$10</p>
+                        <button class="cart" data-id="3" data-name="Sneaker" data-price="10">Add to cart</button>
+                    </div>
+                    <div class="cards">
+                        <img src="jogger.avif" width="100" height="100"><br>
+                        <b>Joggers</b>
+                        <p>$50</p>
+                        <button class="cart" data-id="4" data-name="Joggers" data-price="50">Add to cart</button>
+                    </div>
+                </div>
+            </div>
+            <div class="cart_box">
+                <h2>CART</h2>
+                <div class="cart_item"></div>
+            </div>
+            <div class="checkout">
+                <h2>CHECKOUT</h2>
+                <div class="summary_box"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let btn = document.querySelectorAll(".cart");
+        btn.forEach(item => item.addEventListener("click", addToCart));
+
+        let cart = [];
+        function addToCart(event) {
+            let { id, name, price } = event.target.dataset;
+            update_cart(id, name, parseFloat(price));
+        }
+
+        function update_cart(id, name, price) {
+            let exist = cart.find(item => item.id == id);
+            exist ? exist.quantity++ : cart.push({ id, name, quantity: 1, price });
+            display_cart();
+        }
+
+        function display_cart() {
+            document.querySelector(".cart_item").innerHTML = cart.map(item => `
+                <div class="data">
+                    <span>ID: ${item.id}</span>
+                    <span>Name: ${item.name}</span>
+                    <span>Price: $${item.price}</span>
+                    <span>Quantity:<input type="number" class="inp" value="${item.quantity}" min="1"></span>
+                </div>
+            `).join(" ");
+            update_summary();
+        }
+
+        function update_summary() {
+            let qty = 0, total_price = 0;
+            cart.forEach(item => {
+                qty += item.quantity;
+                total_price += item.price * item.quantity;
+            });
+            document.querySelector(".summary_box").innerHTML = `
+                <p>🛒 Total Items: ${qty}</p>
+                <p>💰 Total Price: $${total_price.toFixed(2)}</p>
+                ${total_price > 0 ? `
+                    <button class="checkout-btn" onclick="showCheckoutModal()">
+                        <i class="fas fa-shopping-cart"></i> Proceed to Checkout
+                    </button>
+                ` : ''}
+            `;
+        }
+
+        function showCheckoutModal() {
+            const modal = document.getElementById('checkoutModal');
+            const modalContent = document.getElementById('modalContent');
+            let total = 0;
+            
+            const itemsHTML = cart.map(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                return `
+                    <div class="order-item">
+                        <span>${item.name} × ${item.quantity}</span>
+                        <span>$${itemTotal.toFixed(2)}</span>
+                    </div>
+                `;
+            }).join('');
+
+            modalContent.innerHTML = `
+                <div class="modal-header">
+                    <h2>Order Summary</h2>
+                    <span class="close" onclick="closeModal()">&times;</span>
+                </div>
+                <div class="order-details">
+                    ${itemsHTML}
+                </div>
+                <div class="total-amount">
+                    Total Amount: $${total.toFixed(2)}
+                </div>
+            `;
+
+            modal.style.display = 'block';
+        }
+
+        // Add this function to handle modal closing
+        function closeModal() {
+            const modal = document.getElementById('checkoutModal');
+            modal.style.display = 'none';
+        }
+
+        // Update event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // Close modal when clicking outside
+            window.addEventListener('click', (event) => {
+                const modal = document.getElementById('checkoutModal');
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // Close modal with Escape key
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    closeModal();
+                }
+            });
+        });
+
+        // Update the payment success handler
+        document.getElementById('payNowBtn').addEventListener('click', () => {
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = `
+                <div class="modal-header">
+                    <h2>Payment Status</h2>
+                    <span class="close" onclick="closeModal()">&times;</span>
+                </div>
+                <div class="payment-success">
+                    <i class="fas fa-check-circle" style="font-size: 3em; color: #00b09b;"></i>
+                    <p>Payment Successful!</p>
+                    <p>Thank you for your purchase.</p>
+                </div>
+            `;
+            
+            // Clear the cart
+            cart = [];
+            display_cart();
+            
+            // Close modal after 2 seconds
+            setTimeout(closeModal, 2000);
+        });
+    </script>
+    <!-- Add this before </body> -->
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Order Summary</h2>
+            <div id="modalContent"></div>
+            <button id="payNowBtn">
+                <i class="fas fa-credit-card"></i> Pay Now
+            </button>
+        </div>
+    </div>
+</body>
+</html>
+
