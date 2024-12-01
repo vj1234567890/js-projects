@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+        <!-- Font Awesome CDN -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">    
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    .container{
+        background-color: rgb(55, 129, 199);
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+    span{
+        color: aliceblue;
+    }
+    #text{
+      width: 50vw;
+      height: 6vh;
+    }
+    button{
+        width: 30px;
+        height: 30px;
+        margin-left: 10px;
+        border: transparent;
+        border-radius: 5px;
+        cursor: pointer;
+        box-shadow:1px 2px 5px 0px;
+    }
+    .todo{
+        display: flex;
+    align-items: center;
+    justify-content: center
+    }
+    #u{
+        margin-top: 20px;
+        list-style: none;
+        width: 70vw;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;  
+    }
+    li{
+        margin: 5px;
+        background-color: rgb(49, 224, 186);
+        width: 50vw;
+        height: 5vh;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content:space-between; 
+        padding: 5px;
+    }
+</style>
+<body>
+    <div class="container">
+        <h1><span>TO-DO</span> LIST</h1>
+        <div class="todo">
+        <input type="text" id="text" placeholder="enter any task....">
+        <button id="btn">
+            <i class="fas fa-pencil-alt">
+            </i>
+        </button>
+        </div>
+        <ul id="u">
+            
+        </ul>
+    </div>
+
+<script>
+    let submit=document.querySelector("#btn");
+    let ul=document.getElementById("u");
+
+    submit.addEventListener("click",function(){
+        let inp=document.getElementById("text").value;
+        let item=document.createElement("li");
+        item.innerText=inp;
+        let del=document.createElement("button");
+        del.innerText="X";
+        del.style.backgroundColor="transparent";
+        del.style.color="grey";
+        item.appendChild(del);
+        ul.appendChild(item);
+        document.getElementById("text").value=""
+        del.addEventListener("click",function(){
+        item.remove();
+   })
+   item.addEventListener("click",function(){
+    item.style.backgroundColor="green";
+   })
+   item.addEventListener("dblclick",function(){
+    let 
+   })
+
+        })
+
+    
+    
+</script>    
+</body>
+</html>
