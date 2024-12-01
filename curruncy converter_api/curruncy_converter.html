@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>Currency Converter</title>
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --secondary: #1d4ed8;
+            --background: #0f172a;
+            --card: #ffffff;
+            --text: #1e293b;
+            --border: #e2e8f0;
+            --input-bg: #f8fafc;
+            --radius: 12px;
+            --shadow: 0 8px 16px -4px rgb(0 0 0 / 0.1), 0 4px 8px -4px rgb(0 0 0 / 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: var(--background);
+            padding: 1rem;
+            gap: 1.5rem;
+            padding-bottom: 10vh;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 600;
+            color: var(--card);
+            text-align: center;
+            margin-bottom: 0;
+        }
+
+        .currency-box {
+            width: min(90%, 600px);
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }        .box {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            padding: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .box-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .swap-btn {
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: auto;
+            display: grid;
+            place-items: center;
+        }
+
+        .swap-btn:hover {
+            background: var(--primary);
+            transform: rotate(180deg);
+        }
+
+        .swap-btn svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            fill: var(--primary);
+        }
+
+        .swap-btn:hover svg {
+            fill: white;
+        }
+
+        .box-bottom {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        select, input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            background: var(--input-bg);
+            transition: var(--transition);
+        }
+
+        select:hover, input:hover {
+            border-color: var(--primary);
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .convert-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .convert-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-1px);
+        }
+
+        .convert-btn:active {
+            transform: translateY(1px);
+        }
+
+        #result {
+            background: var(--input-bg);
+            font-weight: 600;
+            color: var(--primary);
+            text-align: center;
+            font-size: 1.5rem;
+            display: none;
+            border: 2px solid var(--primary);
+        }
+
+
+        @media (max-width: 480px) {
+            .box {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .swap-btn {
+                transform: rotate(90deg);
+                margin: 1rem auto;
+            }
+
+            .swap-btn:hover {
+                transform: rotate(270deg);
+            }
+        }
+        
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Currency Converter</h1>
+        <div class="currency-box">
+            <div class="box">
+                <div class="box-item">
+                    <label for="from">From Currency</label>
+                    <select name="from" id="from" class="from" placeholder="INR">
+                    </select>
+                </div>
+                <div class="box-item">
+                    <button class="swap-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M8 4h2v12H8zm0 0h8v2H8zm6 4h2v12h-2zm0 0h8v2h-8z" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="box-item">
+                    <label for="to">To Currency</label>
+                    <select name="to" id="to" class="from" placeholder="EUR">
+
+                    </select>
+                </div>
+            </div>
+            <div class="box-bottom">
+                <label for="amount">Amount</label>
+                <input type="number" id="amount" placeholder="Enter amount">
+                <button class="convert-btn">Convert</button>
+                <input type="text" id="result" placeholder="0.00" readonly>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="countries.js"></script>
+    <script>
+        $(document).ready(function () {
+            let btn = $(".convert-btn");
+            btn.click(calculate);
+
+        function calculate(){
+                let amount = $("#amount").val();
+                let from = $("#from").val();
+                let to = $("#to").val();
+                //        console.log(amount,from,to);
+                let url = `https://v6.exchangerate-api.com/v6/a8130cc49ef6bcd82a968050/pair/${from}/${to}/${amount}`;
+                let xhr = new XMLHttpRequest();
+                xhr.open("GET",url);
+                xhr.onload=function(){
+                    let data = JSON.parse(xhr.responseText);
+                    $("#result").css("display","block");
+                    $("#result").val(`${data.conversion_result} ${to}`);
+                }
+                xhr.send();
+            }
+            $(".swap-btn").click(function(){
+                let from = $("#from").val();
+                let to = $("#to").val();
+                $("#from").val(to);
+                $("#to").val(from);
+                calculate();
+
+            });
+        });
+    
+    </script>
+</body>
+
+</html>
