@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGE CALCULATOR</title>
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    .container{
+        width: 100vw;
+        height: 100vh;
+        background: linear-gradient(90deg,rgb(70, 27, 226),rgb(123, 153, 235));
+        color: antiquewhite;
+        font-size: larger;
+        font-family: cursive;
+        display: flex;
+        flex-direction: column;
+        padding: 100px 0;
+        justify-content: flex-start;
+        align-items: center;
+    }
+    .container span{
+        color:rgb(212, 212, 17)
+    }
+    .input-box{
+        margin-top: 40px;
+        height: 80px;
+        width: 400px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+    .input-box input {
+        width: 75%;
+        height: 29%;
+        border: transparent;
+        border-radius: 10px;
+        padding: 10px;
+        margin: 10px;
+        cursor: pointer;
+        position: relative;
+    }
+    .input-box input:hover {
+        background-image: linear-gradient(to bottom, #5462debf 50%, #f0f0f0 100%);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .input-box input:hover::before {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 20px;
+        pointer-events: none;
+    }
+    /* Style the calendar dropdown */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        cursor: pointer;
+        padding: 5px;
+        position: absolute;
+        right: 0;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+    }
+    input[type="date"]::-webkit-datetime-edit {
+        padding: 0 10px;
+    }
+    #btn {
+        margin: 0;
+        padding: 10px;
+        width: 50px;
+        height: 50px;
+        border: transparent;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #btn:hover{
+        background-color:rgb(25, 109, 219)
+    }
+    #btn img{
+        width: 80%;
+    }
+    .result{
+        margin-top: 20px;
+        font-size: larger;
+        font-weight: 500;
+        color:rgb(223, 223, 83);
+        text-align: center;
+    }
+
+
+
+
+</style>
+<body>
+    <div class="container">
+     <h1>JAVASCRIPT<br><span>AGE CALCULATOR</span></h1>
+      <div class="input-box">
+        <input  class="dob" type="date">
+        <button type="submit" id="btn"><img src="search.png" alt=""></button>
+      </div>
+    </div>
+    <script>
+        inp=document.querySelector(".dob");
+        let btn=document.querySelector("#btn");
+        btn.addEventListener("click",()=>calculateAge(inp));
+function calculateAge(inp){
+    let currunt_date=new Date();
+    // console.log(inp);
+    // console.log(inp.value);
+    let new_date=new Date(inp.value);
+    console.log(new_date);
+   let year=currunt_date.getFullYear()-new_date.getFullYear();
+   let month=currunt_date.getMonth()-new_date.getMonth(); 
+   let day=currunt_date.getDate()-new_date.getDate();
+   console.log(`year=${year}, month=${month}, day=${day}`);
+   if(month < 0 || (month === 0 && day < 0)) {
+       year--;
+       month += 12;
+   }
+   
+   if(day < 0) {
+       month--;
+       // Get days in previous month
+       let prevMonthDate = new Date(currunt_date.getFullYear(), currunt_date.getMonth() - 1, 0);
+       day += prevMonthDate.getDate();
+   }
+
+   let result = `Your Age is ${year} Years ${month} Months ${day} Days`;
+   if(isNaN(year) && isNaN(month) &&isNaN(day)){
+    result="invalid";
+   }
+   // Create or update result element
+   let resultDiv = document.querySelector('.result');
+   if(!resultDiv) {
+       resultDiv = document.createElement('div');
+       resultDiv.className = 'result';
+       document.querySelector('.container').appendChild(resultDiv);
+   }
+   resultDiv.textContent = result;
+    
+    
+
+}
+    </script>
+</body>
+</html>
