@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GET CHANGE</title>
+</head>
+<style>
+*{
+    margin: 0;
+    padding: 0;
+}
+.container{
+ background-color:rgb(167 163 235 / 66%);
+ width: 100%;
+ height: 100vh;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+}
+.box{
+background-color: rgb(219, 219, 202);
+width: 23vw;
+height: 55vh;
+/*display: flex;
+justify-content: center; */
+
+}
+.text{
+    /* margin-top: 10px; */
+    width: 100%;
+    height: 20%;
+}
+.notes{
+    background-color: rgb(165, 165, 168);
+    width: 100%;
+    height: 60%;
+    border-radius: 10px;
+}
+.btnarea{
+    background-color: rgb(228, 226, 223);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn{
+    margin: 10px;
+    border: none;
+    background-color: rgb(107, 231, 107);
+    width: 100px;
+    height: 50px;
+    border-radius: 35%;
+    font-size: medium;
+    font-weight: bolder;
+    transition: background-color 0.3s ease;
+}
+.btn:hover{
+    background-color:rgb(88, 196, 88);
+}
+.text{
+    border-radius: 10px;
+}
+.box{
+    border-radius: 20px;
+}
+ul{
+    /* margin: 10px; */
+    padding: 10px;
+    background-color: transparent;
+}
+li{
+    margin: 8px;
+    padding: 2px;
+    color: crimson;
+
+}
+
+</style>
+<body>
+    <div class="container">
+        <div class="box">
+            <textarea class="text"></textarea>
+            <div class="btnarea"><button class="btn" onclick="change()">Calculate</button></div>
+            <div class="notes">
+                <ul class="list">
+                    </ul>
+            </div>
+
+        </div>
+    </div>
+<script>
+    let count=0;
+    function change(){
+    let n=document.querySelector(".text").value;
+    let arr=[500,200,100,50,20,10,5,1]
+    let obj={};
+    // console.log("original value = "+n);        
+    while(n>0){
+        for(let i=0;i<arr.length;i++){
+            if(n>=arr[i]){
+                // console.log(arr[i]+" : "+Math.floor(n/arr[i]));
+                obj[arr[i]]=Math.floor(n/arr[i])
+                n=n%arr[i];
+            }
+        }
+    }
+    printvalue(obj);
+}
+function printvalue(obj){
+    ul=document.querySelector(".list");
+    
+    if(count==1){
+      ul.innerHTML="";
+    }
+    count=1;
+
+ul.style.textAlign = "center";    
+
+    for (const key in obj) {
+        li=document.createElement("li");
+        li.style.listStyleType = "none";
+        item=`${key} :  ${obj[key]}`;
+        li.innerHTML=item;
+        ul.appendChild(li);       
+    }
+    
+}
+
+</script>    
+</body>
+</html>
